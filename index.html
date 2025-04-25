@@ -16,15 +16,15 @@
   </select>
   <button onclick="updateResume()">View Resume</button>
   <br><br>
-  <!--iframe id="resumeFrame" width="100%" height="600px"></iframe-->
-  <div id="jr-card-widget" data-username="nrajesh" data-theme="default"></div>
+  <iframe id="resumeFrame" width="100%" height="100vh"; border="none"></iframe>
+  <!--div id="jr-card-widget" data-username="nrajesh" data-theme="default"></div>
   <script src="//mudassir0909.github.io/jsonresume-card/dist/1.0.0/jr-card-widget.min.js"></script>
   <script>
   document.getElementById('theme-select').addEventListener('change', function() {
     document.getElementById('jr-card-widget').setAttribute('data-theme', this.value);
     // Optionally, re-initialize the widget if needed
   });
-  </script>
+</script-->
   <script>
     function updateResume() {
       var theme = document.getElementById('theme').value;
