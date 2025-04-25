@@ -5,7 +5,7 @@
 </head>
 <body>
   <label for="theme" style="font-size: 1em; padding: 2px 2px;"><b>Select Theme:</b></label>&nbsp;&nbsp;
-  <select id="theme" style="width: 180px; height: 56px; font-size: 1.3em; padding: 3px 4px;">
+  <select id="theme" style="width: 180px; height: 56px; font-size: 1.3em; padding: 3px 4px;" onchange="updateResume()">
     <option value="onepage-plus">Onepage Plus</option>
     <option value="professional">Professional</option>
     <option value="macchiato">Macchiato</option>
@@ -14,7 +14,7 @@
     <option value="flat">Flat</option>
     <!-- Add more themes as desired -->
   </select>&nbsp;&nbsp;
-  <button onclick="updateResume()" style="width: 180px; height: 36px; font-size: 1em; padding: 3px 3px;">View Resume</button>
+  <!--button onclick="updateResume()" style="width: 180px; height: 36px; font-size: 1em; padding: 3px 3px;">View Resume</button-->
   <br><br>
   <div style="width: 100vw; height: 100vh;">
     <iframe id="resumeFrame" style="width: 100%; height: 100%; border: none"></iframe>
