@@ -8,7 +8,7 @@
   <select id="theme">
     <option value="professional">Professional</option>
     <option value="macchiato">Macchiato</option>
-    <option value="default">Onepage Plus</option>
+    <option value="onepage-plus">Onepage Plus</option>
     <option value="stackoverflow">Stack Overflow</option>
     <option value="elegant">Elegant</option>
     <option value="flat">Flat</option>
@@ -16,8 +16,11 @@
   </select>
   <button onclick="updateResume()">View Resume</button>
   <br><br>
-  <iframe id="resumeFrame" style="width: 100%; height: 100vh; border: none"></iframe>
-  <!--div id="jr-card-widget" data-username="nrajesh" data-theme="default"></div>
+  <div style="width: 100vw; height: 100vh;">
+    <iframe id="resumeFrame" style="width: 100%; height: 100%; border: none"></iframe>
+  </div>
+
+  <!--div id="jr-card-widget" data-username="nrajesh" data-theme="onepage-plus"></div>
   <script src="//mudassir0909.github.io/jsonresume-card/dist/1.0.0/jr-card-widget.min.js"></script>
   <script>
   document.getElementById('theme-select').addEventListener('change', function() {
