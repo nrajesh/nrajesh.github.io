@@ -22,8 +22,8 @@ This site renders the resume using one of the available [JSON Resume templates](
 
 ## How to update your resume
 
-1. Edit the [resume.json Gist file](https://gist.github.com/nrajesh/773fb6b9372c3c44e08a47fea36644f9#file-resume-json).
-2. Changes will be reflected on this site once the gist is updated.
+1. Login to [JSON Resume website](https://registry.jsonresume.org/nrajesh) using Github login option and edit the content (preferable option) or edit the [resume.json Gist file](https://gist.github.com/nrajesh/773fb6b9372c3c44e08a47fea36644f9#file-resume-json).
+3. Changes will be reflected on this site once the gist is updated.
 
 ## More Resources
 
