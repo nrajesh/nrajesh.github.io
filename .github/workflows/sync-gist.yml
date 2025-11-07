@@ -1,0 +1,29 @@
+name: Sync Gist to Repo
+
+on:
+  schedule:
+    - cron: '0 0 * * *'   # Daily at 00:00 UTC (adjust as needed)
+  workflow_dispatch:      # Allow manual trigger
+
+jobs:
+  sync-gist:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v4
+
+    - name: Fetch Gist content
+      run: |
+        curl -L https://gist.githubusercontent.com/nrajesh/773fb6b9372c3c44e08a47fea36644f9/raw -o resume.json
+
+    - name: Check for changes and commit
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add resume.json
+        if ! git diff --cached --quiet; then
+          git commit -m "Sync resume.json from Gist"
+          git push
+        else
+          echo "No changes to commit"
+        fi
