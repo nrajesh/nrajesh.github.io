@@ -6,6 +6,16 @@ on:
     branches: [main]
  
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      RESUME_GIST_URL: https://gist.githubusercontent.com/nrajesh/773fb6b9372c3c44e08a47fea36644f9/raw/resume.json
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download resume.json from environment variable
+        run: curl -L "$RESUME_GIST_URL" -o resume.json
   build-deploy:
     runs-on: ubuntu-latest
  
@@ -47,7 +57,7 @@ jobs:
               <div class="theme-card"><a href="/flat.html">Flat</a></div>
               <div class="theme-card"><a href="/cv.html">CV</a></div>
             </div>
-            <p><a href="https://gist.github.com/nrajesh/773fb6b9372c3c44e08a47fea36644f9/raw/resume.json">Download JSON</a> | <a href="/resume.pdf">Download PDF</a></p>
+            <p><a href="/resume.json">Download JSON</a> | <a href="/resume.pdf">Download PDF</a></p>
           </body>
           </html>
           EOF
