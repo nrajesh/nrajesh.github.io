@@ -38,8 +38,29 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        theme:
+          - government-standard
+          - californian-warm
+          - community-garden
+          - consultant-polished
+          - data-driven
+          - developer-mono
+          - elegant
+          - french-atelier
+          - london-bureau
+          - marketing-narrative
+          - new-york-editorial
+          - nordic-minimal
+          - operations-precision
+          - product-manager-canvas
+          - professional
+          - sales-hunter
+          - stackoverflow
+          - tokyo-modernist
+          - two-column-modernist
+          - urban-techno
+          - writers-portfolio
         format: [pdf]
-        theme: [professional, standard, elegant, two-column-modernist, tokyo-modernist]
 
     steps:
       - name: Checkout repo
