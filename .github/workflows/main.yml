@@ -76,6 +76,10 @@ jobs:
           npm install -g resume-cli
           npm install -g puppeteer
 
+      - name: Install resume themes
+        run: |
+          npm install jsonresume-theme-${{ matrix.theme }}
+
       - name: Export resume
         run: |
           mkdir -p exports
