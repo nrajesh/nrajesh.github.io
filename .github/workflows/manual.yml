@@ -1,0 +1,40 @@
+# .github/workflows/export-all-formats.yml
+name: Export All Resume Formats
+ 
+on:
+  push:
+    branches: [main]
+    paths: ['resume.json']
+ 
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        format: [html, pdf, markdown, docx]
+        theme: [government-standard, californian-warm, community-garden, consultant-polished, data-driven, developer-mono, elegant, french-atelier, london-bureau, marketing-narrative, new-york-editorial, nordic-minimal, operations-precision, product-manager-canvas, professional, sales-hunter, stackoverflow, tokyo-modernist, two-column-modernist, urban-techno, writers-portfolio]
+ 
+    steps:
+      - uses: actions/checkout@v4
+ 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+ 
+      - name: Install tools
+        run: |
+          npm install -g resume-cli
+          npm install -g puppeteer
+ 
+      - name: Export resume
+        run: |
+          mkdir -p exports
+          resume export exports/resume-${{ matrix.theme }}.${{ matrix.format }} \
+            --theme ${{ matrix.theme }}
+ 
+      - name: Upload exports
+        uses: actions/upload-artifact@v4
+        with:
+          name: resume-${{ matrix.theme }}-${{ matrix.format }}
+          path: exports/
