@@ -1,12 +1,11 @@
-# .github/workflows/multi-theme-pages.yml
 name: Deploy Multi-Theme Resume Site
- 
+
 on:
   push:
     branches: [main]
- 
+
 jobs:
-  build:
+  build-deploy:
     runs-on: ubuntu-latest
     env:
       RESUME_GIST_URL: https://gist.githubusercontent.com/nrajesh/773fb6b9372c3c44e08a47fea36644f9/raw/resume.json
@@ -16,24 +15,19 @@ jobs:
 
       - name: Download resume.json from environment variable
         run: curl -L "$RESUME_GIST_URL" -o resume.json
-  build-deploy:
-    runs-on: ubuntu-latest
- 
-    steps:
-      - uses: actions/checkout@v4
- 
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '20'
- 
+
       - name: Install dependencies
         run: npm install -g resume-cli
- 
+
       - name: Generate all themes
         run: |
           mkdir -p public
- 
+
           # Generate index page with theme selector
           cat > public/index.html <<EOF
           <!DOCTYPE html>
@@ -53,28 +47,26 @@ jobs:
             <div class="theme-grid">
               <div class="theme-card"><a href="/professional.html">Professional</a></div>
               <div class="theme-card"><a href="/standard.html">Standard</a></div>
-              <div class="theme-card"><a href="/spartacus.html">Spartacus</a></div>
               <div class="theme-card"><a href="/flat.html">Flat</a></div>
-              <div class="theme-card"><a href="/cv.html">CV</a></div>
             </div>
             <p><a href="/resume.json">Download JSON</a> | <a href="/resume.pdf">Download PDF</a></p>
           </body>
           </html>
           EOF
- 
+
           # Generate each theme
           resume export public/professional.html --theme professional
           resume export public/standard.html --theme standard
-          resume export public/spartacus.html --theme spartacus
           resume export public/flat.html --theme flat
-          resume export public/cv.html --theme cv
- 
+
           # Copy JSON
           cp resume.json public/resume.json
- 
+
           # Generate PDF
           resume export public/resume.pdf --theme professional
- 
+          resume export public/resume.pdf --theme standard
+          resume export public/resume.pdf --theme flat
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
