@@ -27,9 +27,5 @@ jobs:
         git fetch origin main
         git reset --hard origin/main
         git add resume.json
-        if ! git diff --cached --quiet; then
-          git commit -m "Sync resume.json from Gist"
-          git push
-        else
-          echo "No changes to commit"
-        fi
+        git commit -m "Force overwrite resume.json from Gist" --allow-empty
+        git push origin main --force
