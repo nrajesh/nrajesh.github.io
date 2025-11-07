@@ -21,6 +21,8 @@ jobs:
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
         git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/nrajesh/nrajesh.github.io.git
+        git fetch origin main
+        git reset --hard origin/main
         git add resume.json
         if ! git diff --cached --quiet; then
           git commit -m "Sync resume.json from Gist"
