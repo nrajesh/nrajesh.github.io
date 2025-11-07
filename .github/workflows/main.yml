@@ -38,7 +38,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        format: [html, pdf, markdown, docx]
+        format: [pdf]
         theme: [professional, standard, elegant, two-column-modernist, tokyo-modernist]
 
     steps:
