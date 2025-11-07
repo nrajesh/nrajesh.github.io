@@ -1,46 +1,49 @@
-# .github/workflows/main.yml
-name: Export Resume in multiple formats
- 
+name: Sync and Export Resume
+
 on:
   push:
     branches: [main]
-    
+  workflow_dispatch:
+
 env:
   GIST_RAW_URL: ${{ secrets.GIST_RAW_URL }}
-  
+
 jobs:
+  sync-resume:
+    runs-on: ubuntu-latest
+    outputs:
+      sync_completed: ${{ steps.sync_resume.outcome }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/nrajesh/nrajesh.github.io.git
+
+      - name: Sync resume.json from Gist and push
+        id: sync_resume
+        run: |
+          git fetch origin main
+          git reset --hard origin/main
+          curl -L "$GIST_RAW_URL" -o resume.json
+          git add resume.json
+          git commit -m "Force overwrite resume.json from Gist" --allow-empty
+          git push origin main --force
+
   export:
+    needs: sync-resume
     runs-on: ubuntu-latest
     strategy:
       matrix:
         format: [html, pdf, markdown, docx]
         theme: [professional, standard, elegant, two-column-modernist, tokyo-modernist]
-        
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-
-      - name: Fetch Gist content
-        run: |
-          curl -L "$GIST_RAW_URL" -o resume.json
-
-      - name: Check for changes and commit
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/nrajesh/nrajesh.github.io.git
-          git fetch origin main
-          git reset --hard origin/main
-          curl -L "$GIST_RAW_URL" -o resume.json
-          
-      - name: Show final resume.json content before push
-        run: cat resume.json
-
-      - name: Commit and push changes
-        run: |
-          git add resume.json
-          git commit -m "Force overwrite resume.json from Gist" --allow-empty
-          git push origin main --force
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -55,8 +58,7 @@ jobs:
       - name: Export resume
         run: |
           mkdir -p exports
-          resume export exports/resume-${{ matrix.theme }}.${{ matrix.format }} \
-            --theme ${{ matrix.theme }}
+          resume export exports/resume-${{ matrix.theme }}.${{ matrix.format }} --theme ${{ matrix.theme }}
 
       - name: Upload exports as artifact
         uses: actions/upload-artifact@v4
