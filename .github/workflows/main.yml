@@ -40,15 +40,26 @@ jobs:
       matrix:
         theme:
           - government-standard
+          - californian-warm
+          - community-garden
           - consultant-polished
+          - data-driven
+          - developer-mono
           - elegant
+          - french-atelier
+          - london-bureau
           - marketing-narrative
           - new-york-editorial
           - nordic-minimal
+          - operations-precision
+          - product-manager-canvas
           - professional
+          - sales-hunter
           - stackoverflow
           - tokyo-modernist
           - two-column-modernist
+          - urban-techno
+          - writers-portfolio
         format: [pdf]
 
     steps:
@@ -67,7 +78,7 @@ jobs:
 
       - name: Install resume themes
         run: |
-          npm install jsonresume-theme-${{ matrix.theme }}
+          npm i jsonresume-theme-${{ matrix.theme }}
 
       - name: Export resume
         run: |
