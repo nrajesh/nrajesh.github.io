@@ -4,7 +4,6 @@ name: Export Resume in multiple formats
 on:
   push:
     branches: [main]
-    paths: ['resume.json']
     
 jobs:
   export:
@@ -12,9 +11,33 @@ jobs:
     strategy:
       matrix:
         format: [html, pdf, markdown, docx]
-        theme: [professional, standard, spartacus]
+        theme: [professional, standard, elegant, two-column-modernist, tokyo-modernist]
+        
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Fetch Gist content
+        run: |
+          curl -L "$GIST_RAW_URL" -o resume.json
+
+      - name: Check for changes and commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/nrajesh/nrajesh.github.io.git
+          git fetch origin main
+          git reset --hard origin/main
+          curl -L "$GIST_RAW_URL" -o resume.json
+          
+      - name: Show final resume.json content before push
+        run: cat resume.json
+
+      - name: Commit and push changes
+        run: |
+          git add resume.json
+          git commit -m "Force overwrite resume.json from Gist" --allow-empty
+          git push origin main --force
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
