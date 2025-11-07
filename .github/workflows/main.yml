@@ -85,11 +85,20 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: resume-${{ matrix.theme }}-${{ matrix.format }}
-          path: exports/
-
-      - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: peaceiris/actions-gh-pages@v3
+          path: exports/resume-${{ matrix.theme }}.${{ matrix.format }} --theme ${{ matrix.theme }}
+            
+      - name: Create Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./exports
+          files: resume-${{ matrix.theme }}.${{ matrix.format }} --theme ${{ matrix.theme }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit PDF to repository
+        run: |
+          git config --global user.name 'Resume Bot'
+          git config --global user.email 'bot@jsonresume.org'
+          git add resume-${{ matrix.theme }}.${{ matrix.format }}
+          git diff --staged --quiet || git commit -m "chore: update resume PDF [skip ci]"
+          git push
