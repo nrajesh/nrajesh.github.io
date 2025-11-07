@@ -1,0 +1,46 @@
+# .github/workflows/main.yml
+name: Export Resume in multiple formats
+ 
+on:
+  push:
+    branches: [main]
+    paths: ['resume.json']
+    
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        format: [html, pdf, markdown, docx]
+        theme: [professional, standard, spartacus]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install tools
+        run: |
+          npm install -g resume-cli
+          npm install -g puppeteer
+
+      - name: Export resume
+        run: |
+          mkdir -p exports
+          resume export exports/resume-${{ matrix.theme }}.${{ matrix.format }} \
+            --theme ${{ matrix.theme }}
+
+      - name: Upload exports as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: resume-${{ matrix.theme }}-${{ matrix.format }}
+          path: exports/
+
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./exports
