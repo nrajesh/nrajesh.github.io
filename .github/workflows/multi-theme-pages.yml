@@ -20,13 +20,13 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
-          
+
       - name: Install resume-cli and themes locally
         run: |
-            npm install resume-cli
-            npm install jsonresume-theme-professional
-            npm install jsonresume-theme-standard
-            npm install jsonresume-theme-flat
+            npm install resume-cli --legacy-peer-deps
+            npm install jsonresume-theme-professional --legacy-peer-deps
+            npm install jsonresume-theme-standard --legacy-peer-deps
+            npm install jsonresume-theme-flat --legacy-peer-deps
 
       - name: Install dependencies
         run: npm install -g resume-cli
