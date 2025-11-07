@@ -14,7 +14,7 @@ jobs:
 
     - name: Fetch Gist content
       run: |
-        curl -L https://gist.githubusercontent.com/nrajesh/773fb6b9372c3c44e08a47fea36644f9/raw -o resume.json
+        curl -L https://gist.githubusercontent.com/nrajesh/773fb6b9372c3c44e08a47fea36644f9/raw/resume.json -o resume.json
 
     - name: Check for changes and commit
       run: |
