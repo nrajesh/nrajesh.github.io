@@ -27,6 +27,12 @@ jobs:
         git fetch origin main
         git reset --hard origin/main
         curl -L "$GIST_RAW_URL" -o resume.json
+        
+    - name: Show final resume.json content before push
+      run: cat resume.json
+
+    - name: Commit and push changes
+      run: |
         git add resume.json
         git commit -m "Force overwrite resume.json from Gist" --allow-empty
         git push origin main --force
