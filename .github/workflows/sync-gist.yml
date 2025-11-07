@@ -18,6 +18,9 @@ jobs:
     - name: Fetch Gist content
       run: |
         curl -L "$GIST_RAW_URL" -o resume.json
+    
+    - name: Debug fetched resume.json content
+      run: cat resume.json
 
     - name: Check for changes and commit
       run: |
