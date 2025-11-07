@@ -5,6 +5,9 @@ on:
   push:
     branches: [main]
     
+env:
+  GIST_RAW_URL: ${{ secrets.GIST_RAW_URL }}
+  
 jobs:
   export:
     runs-on: ubuntu-latest
