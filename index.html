@@ -29,6 +29,7 @@
     <option value="writers-portfolio">Writer's Portfolio</option>
     <!-- Add more themes as desired -->
   </select>&nbsp;&nbsp;
+  <button onclick="printResume()">Print to PDF</button>
   <!--button onclick="updateResume()" style="width: 180px; height: 36px; font-size: 1em; padding: 3px 3px;">View Resume</button-->
   <br><br>
   <div style="width: 100vw; height: 100vh;">
@@ -52,6 +53,22 @@
     }
     // Optionally, load default on page load
     updateResume();
-  </script>
+  
+    function printResume() {
+      const iframe = document.getElementById('resumeFrame');
+      if (!iframe) {
+        alert('Resume iframe not found!');
+        return;
+      }
+      // For security reasons, this only works if the iframe's src is from the same origin
+      const iframeWindow = iframe.contentWindow;
+      if (!iframeWindow) {
+        alert('Cannot access iframe contents.');
+        return;
+      }
+      iframeWindow.focus();
+      iframeWindow.print();
+    }
+</script>
 </body>
 </html>
