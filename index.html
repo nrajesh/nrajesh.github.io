@@ -5,46 +5,46 @@
 </head>
 <body>
   <label for="theme" style="font-size: 0.8em; padding: 1px 1px;"><b>Select Theme:</b></label>&nbsp;&nbsp;
-  <select id="theme" style="width: 110px; height: 48px; font-size: 0.8em; padding: 1px 1px;" onchange="updateResume()">
-    <option value="government-standard">Standard</option>
-    <option value="californian-warm">Californian Warm</option>
-    <option value="community-garden">Community Garden</option>
-    <option value="consultant-polished">Consultant Polished</option>
-    <option value="data-driven">Data Driven</option>
-    <option value="developer-mono">Developer Mono</option>
-    <option value="elegant">Elegant</option>
-    <option value="french-atelier">French Atelier</option>
-    <option value="london-bureau">London Bureau</option>
-    <option value="marketing-narrative">Narrative</option>
-    <option value="new-york-editorial">NY Editorial</option>
-    <option value="nordic-minimal">Nordic Minimal</option>
-    <option value="operations-precision">Operations Precision</option>
-    <option value="product-manager-canvas">PM Canvas</option>
-    <option value="professional">Professional</option>
-    <option value="sales-hunter">Sales Hunter</option>
-    <option value="stackoverflow">Stack Overflow</option>
-    <option value="tokyo-modernist">Tokyo Modernist</option>
-    <option value="two-column-modernist">Two Column</option>
-    <option value="urban-techno">Urban Techno</option>
-    <option value="writers-portfolio">Writer's Portfolio</option>
-    <!-- Add more themes as desired -->
-  </select>&nbsp;&nbsp;
-  <button onclick="printResume()">Print to PDF</button>
-  <!--button onclick="updateResume()" style="width: 180px; height: 36px; font-size: 1em; padding: 3px 3px;">View Resume</button-->
+  <select id="theme" style="width: 150px; height: 48px; font-size: 0.8em; padding: 1px 1px;" onchange="updateResume()"></select>&nbsp;&nbsp;
   <br><br>
   <div style="width: 100vw; height: 100vh;">
     <iframe id="resumeFrame" style="width: 100%; height: 100%; border: none"></iframe>
   </div>
 
-  <!--div id="jr-card-widget" data-username="nrajesh" data-theme="onepage-plus"></div>
-  <script src="//mudassir0909.github.io/jsonresume-card/dist/1.0.0/jr-card-widget.min.js"></script>
   <script>
-  document.getElementById('theme-select').addEventListener('change', function() {
-    document.getElementById('jr-card-widget').setAttribute('data-theme', this.value);
-    // Optionally, re-initialize the widget if needed
-  });
-</script-->
-  <script>
+    const themes = [
+      { value: "government-standard", label: "Standard" },
+      { value: "californian-warm", label: "Californian Warm" },
+      { value: "community-garden", label: "Community Garden" },
+      { value: "consultant-polished", label: "Consultant Polished" },
+      { value: "data-driven", label: "Data Driven" },
+      { value: "developer-mono", label: "Developer Mono" },
+      { value: "elegant", label: "Elegant" },
+      { value: "french-atelier", label: "French Atelier" },
+      { value: "london-bureau", label: "London Bureau" },
+      { value: "marketing-narrative", label: "Narrative" },
+      { value: "new-york-editorial", label: "NY Editorial" },
+      { value: "nordic-minimal", label: "Nordic Minimal" },
+      { value: "operations-precision", label: "Operations Precision" },
+      { value: "product-manager-canvas", label: "PM Canvas" },
+      { value: "professional", label: "Professional" },
+      { value: "sales-hunter", label: "Sales Hunter" },
+      { value: "stackoverflow", label: "Stack Overflow" },
+      { value: "tokyo-modernist", label: "Tokyo Modernist" },
+      { value: "two-column-modernist", label: "Two Column" },
+      { value: "urban-techno", label: "Urban Techno" },
+      { value: "writers-portfolio", label: "Writer's Portfolio" }
+    ];
+
+    const selectElement = document.getElementById('theme');
+
+    themes.forEach(theme => {
+      const option = document.createElement('option');
+      option.value = theme.value;
+      option.textContent = theme.label;
+      selectElement.appendChild(option);
+    });
+
     function updateResume() {
       var theme = document.getElementById('theme').value;
       var username = 'nrajesh'; // Replace with your username
