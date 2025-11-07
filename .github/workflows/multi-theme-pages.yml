@@ -61,7 +61,6 @@ jobs:
 
           # Generate each theme
           resume export public/professional.html --theme professional
-          resume export public/standard.html --theme standard
           resume export public/flat.html --theme flat
 
           # Copy JSON
