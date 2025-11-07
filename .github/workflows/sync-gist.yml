@@ -1,5 +1,8 @@
 name: Sync Gist to Repo
 
+env:
+  GIST_RAW_URL: ${{ secrets.GIST_RAW_URL }}
+
 on:
   schedule:
     - cron: '0 0 * * *'   # Daily at 00:00 UTC (adjust as needed)
@@ -14,7 +17,7 @@ jobs:
 
     - name: Fetch Gist content
       run: |
-        curl -L https://gist.githubusercontent.com/nrajesh/773fb6b9372c3c44e08a47fea36644f9/raw/resume.json -o resume.json
+        curl -L "$GIST_RAW_URL" -o resume.json
 
     - name: Check for changes and commit
       run: |
