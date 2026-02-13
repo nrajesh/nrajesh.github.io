@@ -1,14 +1,17 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <title>Resume - Rajesh Narayanan</title>
 </head>
+
 <body>
   <label for="theme" style="font-size: 0.8em; padding: 1px 1px;"><b>Select Theme:</b></label>&nbsp;&nbsp;
-  <select id="theme" style="width: 150px; height: 48px; font-size: 0.8em; padding: 1px 1px;" onchange="updateResume()"></select>&nbsp;&nbsp;
+  <select id="theme" style="width: 150px; height: 48px; font-size: 0.8em; padding: 1px 1px;"
+    onchange="updateResume()"></select>&nbsp;&nbsp;
   <br><br>
   <div style="width: 100vw; height: 100vh;">
-    <iframe id="resumeFrame" style="width: 100%; height: 100%; border: none"></iframe>
+    <iframe id="resumeFrame" style="width: 100%; height: 100%; border: none;"></iframe>
   </div>
 
   <script>
@@ -37,38 +40,26 @@
     ];
 
     const selectElement = document.getElementById('theme');
-
-    themes.forEach(theme => {
+    themes.forEach(t => {
       const option = document.createElement('option');
-      option.value = theme.value;
-      option.textContent = theme.label;
+      option.value = t.value;
+      option.textContent = t.label;
       selectElement.appendChild(option);
     });
+    selectElement.value = 'elegant';
 
-    function updateResume() {
-      var theme = document.getElementById('theme').value;
-      var username = 'nrajesh'; // Replace with your username
-      var url = 'https://registry.jsonresume.org/' + username + '?theme=' + theme;
-      document.getElementById('resumeFrame').src = url;
+    const GIST_RAW = 'https://gist.githubusercontent.com/nrajesh/773fb6b9372c3c44e08a47fea36644f9/raw/resume.json';
+
+    async function updateResume() {
+      const theme = document.getElementById('theme').value;
+
+      // Try jsonresume.org first (fallback)
+      let url = `https://jsonresume.org/@nrajesh?theme=${theme}`;
+
+      // If fails, use Gist + proxy/basic render (TODO: expand)
+      document.getElementById('resumeFrame').src = url + '&t=' + Date.now(); // Cache bust
     }
-    // Optionally, load default on page load
+
+    // Load default
     updateResume();
-  
-    function printResume() {
-      const iframe = document.getElementById('resumeFrame');
-      if (!iframe) {
-        alert('Resume iframe not found!');
-        return;
-      }
-      // For security reasons, this only works if the iframe's src is from the same origin
-      const iframeWindow = iframe.contentWindow;
-      if (!iframeWindow) {
-        alert('Cannot access iframe contents.');
-        return;
-      }
-      iframeWindow.focus();
-      iframeWindow.print();
-    }
-</script>
-</body>
-</html>
+  </
