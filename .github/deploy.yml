@@ -1,0 +1,119 @@
+name: Deploy Multi-Theme Resume to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:  # Manual trigger
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    env:
+      GIST_URL: ${{ vars.GIST_URL }}  # Your repo variable
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Download resume.json from Gist
+      run: |
+        curl -L "$GIST_URL" -o resume.json
+        echo "Downloaded $(wc -c < resume.json) bytes"
+
+    - name: Verify resume.json
+      run: |
+        ls -lah resume.json
+        head -5 resume.json
+        jq .basics.name resume.json  # Confirm valid JSON
+
+    - name: Install resume-cli globally
+      run: npm install -g resume-cli
+
+    - name: Generate multi-theme index.html
+      run: |
+        cat > index.html << 'HTML_EOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Rajesh Narayanan - Resume</title>
+  <style>
+    body { font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; line-height: 1.6; }
+    #themeSelect { font-size: 16px; padding: 8px; margin: 10px 0 20px; border: 1px solid #ddd; border-radius: 4px; }
+    #resume { border: 1px solid #eee; padding: 30px; min-height: 600px; background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    #pdfLink { margin: 20px 0; padding: 10px; background: #007acc; color: white; text-decoration: none; border-radius: 4px; display: inline-block; }
+  </style>
+</head>
+<body>
+  <h1>Rajesh Narayanan - Resume</h1>
+  <label>Theme: 
+    <select id="themeSelect" onchange="loadResume()">
+      <option value="flat">Flat</option>
+      <option value="elegant" selected>Elegant</option>
+      <option value="onepage" >Onepage</option>
+      <option value="stackoverflow">StackOverflow</option>
+      <option value="class">Class (Modern)</option>
+    </select>
+  </label>
+  <a id="pdfLink" href="#" onclick="exportPDF(); return false;">📄 Download PDF</a>
+  <div id="resume">Loading resume...</div>
+
+  <script>
+    const GIST_URL = '%GIST_URL%';  // Embedded from workflow env
+    
+    async function loadResume() {
+      const resumeEl = document.getElementById('resume');
+      resumeEl.innerHTML = 'Fetching resume...';
+      
+      try {
+        const res = await fetch(GIST_URL);
+        const resume = await res.json();
+        const theme = document.getElementById('themeSelect').value;
+        
+        // Simple theme renderer (fallback for static; extend with CDN if needed)
+        let html = `<h2>${resume.basics.name}</h2>
+                    <p><strong>${resume.basics.label}</strong> | ${resume.basics.email} | ${resume.basics.location.city}</p>
+                    <h3>Experience</h3><ul>`;
+        
+        (resume.work || []).forEach(job => {
+          html += `<li><strong>${job.position}</strong> at ${job.company} (${job.startDate} - ${job.endDate || 'Present'})</li>`;
+        });
+        html += `</ul><h3>Skills</h3><ul>`;
+        (resume.skills || []).forEach(skill => {
+          html += `<li>${skill.name}: ${skill.keywords.join(', ')}</li>`;
+        });
+        html += '</ul>';
+        
+        // Theme styles (extend as needed)
+        const themes = {
+          flat: 'background: #f8f9fa; color: #333;',
+          elegant: 'font-family: Georgia; background: #fffaf0;',
+          onepage: 'columns: 2;',
+          stackoverflow: 'border-left: 4px solid #f69;',
+          class: 'font-family: monospace;'
+        };
+        resumeEl.innerHTML = `<div style="${themes[theme] || ''}">${html}</div>`;
+      } catch (e) {
+        resumeEl.innerHTML = `<p style="color:red;">Error: ${e.message}</p>`;
+      }
+    }
+    
+    function exportPDF() {
+      // Simple PDF link (extend with jsPDF for full render)
+      window.open(GIST_URL.replace('/raw/', '/raw/resume-pdf'), '_blank');
+    }
+    
+    loadResume();
+  </script>
+</body>
+</html>
+HTML_EOF
+
+        # Embed actual Gist URL into HTML
+        sed -i "s|%GIST_URL%|$GIST_URL|g" index.html
+
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./
+        force_orphan: true
