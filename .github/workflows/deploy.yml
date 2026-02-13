@@ -1,4 +1,4 @@
-name: Deploy Multi-Theme Resume
+name: Deploy Resume to GitHub Pages
 
 on:
   push:
@@ -9,14 +9,14 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     env:
-      GIST_URL: ${{ vars.GIST_URL }}  # Matches YOUR repo variable
+      GIST_URL: ${{ vars.GIST_URL }}
 
     steps:
     - uses: actions/checkout@v4
 
-    - name: Download resume.json
+    - name: Debug & Download
       run: |
-        echo "Using GIST_URL: $GIST_URL"
+        echo "GIST_URL: $GIST_URL"
         curl -L "$GIST_URL" -o resume.json
 
     - name: Setup Node
@@ -24,13 +24,20 @@ jobs:
       with:
         node-version: 20
 
-    - name: Install resume-cli
-      run: npm install -g resume-cli
+    - name: Create temp dir & install
+      run: |
+        mkdir -p temp-resume
+        cd temp-resume
+        npm init -y
+        npm install resume-cli jsonresume-theme-flat jsonresume-theme-elegant --save-dev
 
-    - name: Export to index.html (elegant theme)
-      run: resume export --theme elegant index.html
+    - name: Export themes
+      run: |
+        cd temp-resume
+        npx resume export --theme flat ../index.html
+        npx resume export --theme elegant ../resume-elegant.html
 
-    - name: Deploy to Pages
+    - name: Deploy
       uses: peaceiris/actions-gh-pages@v3
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
