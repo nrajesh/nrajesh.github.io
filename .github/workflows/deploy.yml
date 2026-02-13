@@ -27,6 +27,7 @@ jobs:
     - name: Create temp dir & install
       run: |
         mkdir -p temp-resume
+        cp resume.json temp-resume/resume.json
         cd temp-resume
         npm init -y
         npm install resume-cli jsonresume-theme-flat jsonresume-theme-elegant --save-dev
