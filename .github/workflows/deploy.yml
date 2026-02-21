@@ -39,13 +39,13 @@ jobs:
         cp resume.json temp-resume/resume.json
         cd temp-resume
         npm init -y
-        npm install resume-cli jsonresume-theme-techlead jsonresume-theme-flat jsonresume-theme-elegant --save-dev
+        npm install resume-cli jsonresume-theme-cora jsonresume-theme-flat jsonresume-theme-elegant --save-dev
 
     - name: Export themes
       run: |
         mkdir -p public
         cd temp-resume
-        npx resume export --theme techlead ../public/index.html
+        npx resume export --theme cora ../public/index.html
         npx resume export --theme flat ../public/resume-flat.html
         npx resume export --theme elegant ../public/resume-elegant.html
         cp resume.json ../public/resume.json
