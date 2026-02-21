@@ -39,17 +39,17 @@ jobs:
         cp resume.json temp-resume/resume.json
         cd temp-resume
         npm init -y
-        npm install resume-cli jsonresume-theme-spartacus jsonresume-theme-flat jsonresume-theme-elegant jsonresume-theme-spartan jsonresume-theme-clean --save-dev
+        npm install resume-cli jsonresume-theme-paper jsonresume-theme-flat jsonresume-theme-elegant jsonresume-theme-relaxed jsonresume-theme-professional --save-dev
 
     - name: Export themes
       run: |
         mkdir -p public
         cd temp-resume
-        npx resume export --theme spartacus ../public/index.html
+        npx resume export --theme paper ../public/index.html
         npx resume export --theme flat ../public/resume-flat.html
         npx resume export --theme elegant ../public/resume-elegant.html
-        npx resume export --theme spartan ../public/resume-spartan.html
-        npx resume export --theme clean ../public/resume-clean.html
+        npx resume export --theme relaxed ../public/resume-relaxed.html
+        npx resume export --theme professional ../public/resume-professional.html
         cp resume.json ../public/resume.json
 
 
